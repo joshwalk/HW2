@@ -27,6 +27,10 @@ app.config['SECRET_KEY'] = 'hardtoguessstring'
 ###### FORMS #######
 ####################
 
+class AlbumEntryForm(FlaskForm):
+	album_name = StringField("Enter the name of an album: ", validators=[Required()])
+	like_no = RadioField("How much do you like this album? (1 low, 3 high), choices = [("1","1"),("2","2"),("3","3")], validators=[Required()])
+	submit = SubmitField('Submit')
 
 
 
@@ -42,6 +46,25 @@ def hello_world():
 @app.route('/user/<name>')
 def hello_user(name):
     return '<h1>Hello {0}<h1>'.format(name)
+
+@app.route('/artistform')
+def artist_form():
+	return render_template('artistform.html')
+
+@app.route('/artist_info', methods=['GET','POST'])
+def artist_info():
+	if request.method == 'GET':
+		artist = request.args.get('artist')
+		response = requests.get("https://itunes.apple.com/search?term=" + artist)
+		results = json.loads(response.text)
+		data = results['results']
+	return render_template("artist_info.html", objects = data)
+
+@app.route('/artistlinks')
+def artist_links():
+	return render_template('artist_links.html')
+
+@app.route('/specific/song/<artist_name>')
 
 
 if __name__ == '__main__':
