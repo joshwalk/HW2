@@ -1,0 +1,6 @@
+  <form method="POST" action="{{url_for('album_result')}}">
+	  {{ form.hidden_tag() }}
+      <p>{{ form.album_name.label }}{{ form.album_name() }}</p>
+      <p>{{ form.like_rating.label }}{{ form.like_rating() }}</p>
+      {{ form.submit() }}
+  </form>
